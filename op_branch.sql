@@ -24,10 +24,10 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ob_branch`
+-- Table structure for table `op_branch`
 --
 
-CREATE TABLE `ob_branch` (
+CREATE TABLE `op_branch` (
   `id` int(11) NOT NULL,
   `branch_code` varchar(255) NOT NULL,
   `branch_name` varchar(255) NOT NULL,
@@ -57,9 +57,9 @@ CREATE TABLE `ob_branch` (
 --
 
 --
--- Indexes for table `ob_branch`
+-- Indexes for table `op_branch`
 --
-ALTER TABLE `ob_branch`
+ALTER TABLE `op_branch`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `branch_code` (`branch_code`);
 
@@ -68,9 +68,9 @@ ALTER TABLE `ob_branch`
 --
 
 --
--- AUTO_INCREMENT for table `ob_branch`
+-- AUTO_INCREMENT for table `op_branch`
 --
-ALTER TABLE `ob_branch`
+ALTER TABLE `op_branch`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
