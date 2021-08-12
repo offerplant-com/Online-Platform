@@ -24,10 +24,10 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tb_sale_item`
+-- Table structure for table `op_sale_item`
 --
 
-CREATE TABLE `tb_sale_item` (
+CREATE TABLE `op_sale_item` (
   `id` int(11) NOT NULL,
   `txn_type` varchar(255) NOT NULL DEFAULT 'SALE' COMMENT 'SALE , RETURN\r\n',
   `sale_id` int(11) NOT NULL,
@@ -54,9 +54,9 @@ CREATE TABLE `tb_sale_item` (
 --
 
 --
--- Indexes for table `tb_sale_item`
+-- Indexes for table `op_sale_item`
 --
-ALTER TABLE `tb_sale_item`
+ALTER TABLE `op_sale_item`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -64,9 +64,9 @@ ALTER TABLE `tb_sale_item`
 --
 
 --
--- AUTO_INCREMENT for table `tb_sale_item`
+-- AUTO_INCREMENT for table `op_sale_item`
 --
-ALTER TABLE `tb_sale_item`
+ALTER TABLE `op_sale_item`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
