@@ -32,7 +32,6 @@ CREATE TABLE `op_branch` (
   `branch_code` varchar(255) NOT NULL,
   `branch_name` varchar(255) NOT NULL,
   `branch_director` varchar(255) NOT NULL,
-  `branch_father` varchar(255) NOT NULL,
   `branch_dos` date NOT NULL,
   `branch_address` varchar(255) NOT NULL,
   `district_code` varchar(255) NOT NULL,
