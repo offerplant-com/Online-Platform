@@ -636,6 +636,34 @@ function direct_sql($sql, $type='get')
 		return $result;
 	}
 
+function direct_sql_file($filename)
+{
+	global $con;
+	// Temporary variable, used to store current query
+	$templine = '';
+	// Read in entire file
+	$lines = file($filename);
+	// Loop through each line
+	foreach ($lines as $line) {
+	// Skip it if it's a comment
+		if (substr($line, 0, 2) == '--' || $line == '')
+			continue;
+
+	// Add this line to the current segment
+		$templine .= $line;
+	// If it has a semicolon at the end, it's the end of the query
+		if (substr(trim($line), -1, 1) == ';') {
+			// Perform the query
+			$con->query($templine) or print('Error performing query \'<strong>' . $templine . '\': ' . $con->error() . '<br /><br />');
+			// Reset temp variable to empty
+			$templine = '';
+		}
+	}
+	$res['msg'] = $filename. " imported successfully";
+	$res['status'] = "success";
+	return $res;
+}
+
 // GET SINGLE DATA FORM TABLE BASED ON CONDITION
 
 function get_data($table_name, $id , $field_name =null, $pkey ='id')
