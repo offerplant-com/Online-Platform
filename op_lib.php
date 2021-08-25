@@ -97,7 +97,7 @@ function decode($input) {
 
 // USE TO CREATE STRING REPLACE SPACE WITH UNDERSCORE FORM STRING 
 
-function removespace($str)
+function remove_space($str)
 		{
 		$str =trim($str);
 		return strtolower(preg_replace("/[^a-zA-Z0-9]+/", "_", $str));
@@ -105,7 +105,7 @@ function removespace($str)
 
 // USE TO CREATE STRING REPLACE UNDERSCORE WITH SPACE FORM STRING 
 		
-function addspace($str)
+function add_space($str)
 		{
 		$str =trim($str);
 		return ucwords(str_replace('_', ' ', $str));
@@ -113,7 +113,7 @@ function addspace($str)
 		
 // GET VIDEO ID FROM YOUTUBE LINK 
 
-function getvid($url)
+function get_vid($url)
 		{
 			parse_str( parse_url( $url, PHP_URL_QUERY ), $my_array_of_vars );
 			return $my_array_of_vars['v'];    
@@ -539,7 +539,7 @@ function get_all( $table_name, $column_list ='*', $whereArr =null , $orderby ='i
 			$sql = "SELECT $column_list FROM $table_name where " .implode('and ', $where);
 		}
 		else{
-			$sql = "SELECT $column_list FROM $table_name where status <>'AUTO' ";
+			$sql = "SELECT $column_list FROM $table_name where status not in ('AUTO','DELETED')  ";
 		}
 		
 		$res = mysqli_query($con,$sql . $orderby) or die("Error In Loading Data : ".mysqli_error($con));
@@ -702,7 +702,7 @@ function get_multi_data( $table_name, $whereArr , $order =null )
 		return $result;	
 	}	
 
-function uploadimg ($file_name , $imgkey = 'rand', $target_dir = "upload")
+function upload_img ($file_name , $imgkey = 'rand', $target_dir = "upload")
     {
 		if (!file_exists($target_dir)) {
 			mkdir($target_dir, 0755, true);
@@ -765,11 +765,12 @@ function rtfmail($to, $subject, $msg)
 	global $inst_name;
 	global $inst_email;
 	global $inst_url;
+	global $base_url;
 	global $inst_address1;
 	global $inst_address2;
-	//$to = 'maryjane@email.com';
-	//$subject = 'Marriage Proposal';
-	$from = 'peterparker@email.com';
+	global $noreply_email;
+	
+	$from = $noreply_email;
 	 
 	// To send HTML mail, the Content-type header must be set
 	$headers  = 'MIME-Version: 1.0' . "\r\n";
@@ -782,22 +783,24 @@ function rtfmail($to, $subject, $msg)
 	 
 	// Compose a simple HTML email message
 	$message = '<html><body>';
-	$message .= "<table width='1000px' cellpadding='20px' cellspacing='0px' border='1' rules='all'>";
-	$message .= "<tr><td colspan='5' aling='center' valign='middle'><img src='http://'".$inst_url.$inst_logo ."' alt='Logo here'/><h3>$inst_name </h3></td></tr>";
-	$message .= "<tr><td colspan='5' aling='center'><p>".$inst_address1. $inst_address2 ."<br> ". $inst_email ."|". $inst_url ."</p></td></tr>";
+	$message .= "<table width='1000px' cellpadding='20px' cellspacing='0px' border='0' rules='all'>";
+	$message .= "<tr><td colspan='3' aling='center' valign='middle'><img src='".$base_url.$inst_logo."' alt='".$inst_name."' height='80px' /></td><td colspan='2'> <h3>$inst_name </h3> </td></tr>";
+
 	$message .= "<tr><td colspan='5' aling='center' valign='top' height='350px'><p> $msg </p></td></tr>";
-	$message .= "<tr><td colspan='5' bgcolor='skyblue' align='left'>Regards, <br> $inst_address , <br> $inst_email <br> $inst_url </p></td></tr>";
+	$message .= "<tr><td colspan='5' bgcolor='lightgreen' align='left'>Regards, <br> $inst_name <br> $inst_address1 $inst_address2 <br> $inst_email  | $inst_url | $app_link </td></tr>";
 	$message .= '</table>';
 	$message .= '</body></html>';
 	 
 	// Sending email
 	if(mail($to, $subject, $message, $headers)){
-		echo 'Your mail has been sent successfully.';
+		$res['msg'] = 'Your mail has been sent successfully.';
+		$res['status'] =='success';
 	} else{
-		echo 'Unable to send email. Please try again.';
+		$res =  'Unable to send email. Please try again.';
+		$res['status'] =='error';
 	}
+	return $res;
 }
-
 
 function api_call ($api_url)
 		{
@@ -816,7 +819,7 @@ function api_call ($api_url)
 		return $result;
 		}
 
-function csvexport ($table_name, $col_list ='*')
+function csv_export ($table_name, $col_list ='*')
 {
 	global $con;
 	global $db_name;
@@ -848,7 +851,7 @@ function csvexport ($table_name, $col_list ='*')
 }
 
 
-function csvimport($table, $pkey='id') // Import CSV FILE to Table
+function csv_import($table, $pkey='id') // Import CSV FILE to Table
 	{
 		 // Allowed mime types
    		 $csvMimes = array('text/x-comma-separated-values', 'text/comma-separated-values', 'application/octet-stream', 'application/vnd.ms-excel', 'application/x-csv', 'text/x-csv', 'text/csv', 'application/csv', 'application/excel', 'application/vnd.msexcel', 'text/plain');
@@ -1022,7 +1025,7 @@ function send_sms($number,$sms)
 			return $res;
 		}		
 
-function daterange($gap=15 ){
+function date_range($gap=15 ){
      
         $startDate = date('Y-m-d');
         $endDate = date ("Y-m-d",strtotime("+$gap days",strtotime($startDate))); 
@@ -1108,7 +1111,7 @@ function dropdown($array_list, $selected =null)
 			}
 		}
 
-function dropdownwithkey($array_list, $selected =null)
+function dropdown_with_key($array_list, $selected =null)
 		{
 			foreach($array_list as $list)
 			{
@@ -1119,7 +1122,7 @@ function dropdownwithkey($array_list, $selected =null)
 			}
 		}
 		
-function dropdownwhere($table_name,$id,$list,$whereArr, $selected =null)
+function dropdown_where($table_name,$id,$list,$whereArr, $selected =null)
 	{
 			global $con;
 
@@ -1141,7 +1144,7 @@ function dropdownwhere($table_name,$id,$list,$whereArr, $selected =null)
 			}
 	}
 	
-function dropdownmultiple($array_list, $selectedArr =null)
+function dropdown_multiple($array_list, $selectedArr =null)
 		{
 			foreach($array_list as $list)
 			{
@@ -1153,7 +1156,7 @@ function dropdownmultiple($array_list, $selectedArr =null)
 			}
 		}
 
-function dropdownlist($tablename,$value,$list,$selected =null, $list2=null)
+function dropdown_list($tablename,$value,$list,$selected =null, $list2=null)
 		{
     		global $con;
     		$i =0;
@@ -1163,19 +1166,19 @@ function dropdownlist($tablename,$value,$list,$selected =null, $list2=null)
     		{
     			$key =$row[$value];
     			$show =$row[$list];
-    			
+    			$col2 ='';
     			if($list2 <> null)
     			{
-    				$list2 = "[ " . $row[$list2]. "]";
+    				$col2 = "[ " . $row[$list2]. " ]";
     			}
     			
     		?>
-    		<option value='<?php echo $key; ?>'<?php if($key ==$selected) echo "selected";?> ><?php echo $show ." ". $list2; ?></option>
+    		<option value='<?php echo $key; ?>'<?php if($key ==$selected) echo "selected";?> ><?php echo $show ." ". $col2; ?></option>
     		<?php
     		}		
 		}
 
-function dropdownlistmultiple($tablename,$value,$list,$selectedArr =null)
+function dropdown_list_multiple($tablename,$value,$list,$selectedArr =null)
 		{
     		global $con;
     		$i =0;
@@ -1192,7 +1195,7 @@ function dropdownlistmultiple($tablename,$value,$list,$selectedArr =null)
     		}		
 		}
 		
-function checklist($name, $array_list, $selected=null, $height='160px' )
+function check_list($name, $array_list, $selected=null, $height='160px' )
 		{
 			$selected = explode(',',$selected);
 			echo "<div style='overflow-y:auto;height:$height'>";
@@ -1246,7 +1249,7 @@ function create_list($table_name, $field,  $whereArr =null)
 		return $list;
 		}
 
- function create_table($array, $isedit =false , $isdelete =false , $edit_link='', $table =''){
+ function html_table($array, $isedit =false , $isdelete =false , $edit_link='', $table =''){
 		// start table
 		$html = "<table class='table'  rules='all'>";
 		// header row
