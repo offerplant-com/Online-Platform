@@ -26,9 +26,32 @@ $con = mysqli_connect( $host_name, $db_user, $db_password, $db_name)
 	// 	DATABASE Sturucture (table_list)
 	// 	CONFIG 	(set_config, update_config,delete_config, all_config, get_config)
 	
+// Create Table with Basic Structure  
+
+function create_table($table_name)
+{
+	global $con;
+	$sql1 ="CREATE TABLE IF NOT EXISTS $table_name (
+	  id int(11) NOT NULL,
+	  status varchar(25) DEFAULT NULL,
+	  created_at timestamp NULL DEFAULT NULL,
+	  created_by int(11) DEFAULT NULL,
+	  updated_at timestamp NULL DEFAULT NULL,
+	  updated_by int(11) DEFAULT NULL
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
 	
+	$res[] = mysqli_query($con,$sql1) or die("Error In Loding Data : ".mysqli_error($con));
 	
-// List of all Tale Existt in databse 
+	$sql2 ="ALTER TABLE $table_name  ADD PRIMARY KEY (id)";
+	$res[] = mysqli_query($con,$sql1) or die("Error In Loding Data : ".mysqli_error($con));
+	
+	$sql3 =" ALTER TABLE $table_name  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT";
+	$res[] = mysqli_query($con,$sql1) or die("Error In Loding Data : ".mysqli_error($con));
+	return $res;
+}
+
+	
+// List of all Table Exist in databse 
 	function table_list()
 	{
 		global $con;
