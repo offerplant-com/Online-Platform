@@ -40,13 +40,17 @@ function create_table($table_name)
 	  updated_by int(11) DEFAULT NULL
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
 	
-	$res[] = mysqli_query($con,$sql1) or die("Error In Loding Data : ".mysqli_error($con));
+	$res[] = mysqli_query($con,$sql1) or die("Error In Createting Table : ".mysqli_error($con));
 	
 	$sql2 ="ALTER TABLE $table_name  ADD PRIMARY KEY (id)";
-	$res[] = mysqli_query($con,$sql2) or die("Error In Loding Data : ".mysqli_error($con));
+	$res[] = mysqli_query($con,$sql2) or die("Error In Assigning Primary Key : ".mysqli_error($con));
 	
 	$sql3 =" ALTER TABLE $table_name  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT";
-	$res[] = mysqli_query($con,$sql3) or die("Error In Loding Data : ".mysqli_error($con));
+	
+	$res[] = mysqli_query($con,$sql3) or die("Error In Creating Auto Increment ID  : ".mysqli_error($con));
+	
+	$sql4 ="ALTER TABLE `op_user` CHANGE `updated_at` `updated_at` TIMESTAMP on update CURRENT_TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP";
+	$res[] = mysqli_query($con,$sql4) or die("Error In Assign Updated at Default Value as Current Timestamp : ".mysqli_error($con));
 	return $res;
 }
 
