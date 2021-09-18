@@ -43,10 +43,10 @@ function create_table($table_name)
 	$res[] = mysqli_query($con,$sql1) or die("Error In Loding Data : ".mysqli_error($con));
 	
 	$sql2 ="ALTER TABLE $table_name  ADD PRIMARY KEY (id)";
-	$res[] = mysqli_query($con,$sql1) or die("Error In Loding Data : ".mysqli_error($con));
+	$res[] = mysqli_query($con,$sql2) or die("Error In Loding Data : ".mysqli_error($con));
 	
 	$sql3 =" ALTER TABLE $table_name  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT";
-	$res[] = mysqli_query($con,$sql1) or die("Error In Loding Data : ".mysqli_error($con));
+	$res[] = mysqli_query($con,$sql3) or die("Error In Loding Data : ".mysqli_error($con));
 	return $res;
 }
 
