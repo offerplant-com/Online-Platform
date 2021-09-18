@@ -452,7 +452,7 @@ function remove_data( $table_name, $id ,$pkey='id')
 		global $user_id;
 		global $current_date_time;
 		
-		$sql = "UPDATE $table_name SET status = 'DELETED' , created_by = '$user_id', created_at ='$current_date_time' WHERE $pkey  ='".$id ."'";
+		$sql = "UPDATE $table_name SET status = 'DELETED' , updated_by = '$user_id', updated_at ='$current_date_time' WHERE $pkey  ='".$id ."'";
 		$res =mysqli_query($con,$sql) or die("Error in Deleting Data". mysqli_error($con));
 		$num = mysqli_affected_rows($con);
 		if($num >=1)
@@ -480,7 +480,7 @@ function remove_multi_data( $table_name, $whereArr)
 				$newvalue = preg_replace('/[^A-Za-z.@,:+0-9\-]/', ' ', $value);
 				$where[] = "$key = '$newvalue'";
 			}
-		$sql = "update ". $table_name ." set status ='DELETED' created_by = '$user_id', created_at ='$current_date_time' WHERE " .implode('and ', $where);
+		$sql = "update ". $table_name ." set status ='DELETED' updated_by = '$user_id', updated_at ='$current_date_time' WHERE " .implode('and ', $where);
 		$res =mysqli_query($con,$sql) or die("Error in Deleting Data". mysqli_error($con));
 		$num = mysqli_affected_rows($con);
 		if($num >=1)
@@ -1059,13 +1059,13 @@ function send_msg($number,$sms)
 function send_sms($number,$sms)
 		{
 		    global $req_by;
-		    global $ctime;
+		    global $current_date_time;
 			$res =null;
 		if(preg_match('/^[6-9]{1}[0-9]{9}+$/', $number) ==1)
 			{
 			$no =urlencode($number);
 			$msg = substr(urlencode($sms),0,340);
-			insert_data('tbl_sms',array('mobile'=>$no,'text'=>$msg,'created_by'=>$req_by,'created_at'=>$ctime));
+			insert_data('tbl_sms',array('mobile'=>$no,'text'=>$msg,'created_by'=>$req_by,'created_at'=>$current_date_time));
 			global $sender_id;
 			global $auth_key_sms;
 			$ch = curl_init();
