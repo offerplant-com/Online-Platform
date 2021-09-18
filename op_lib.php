@@ -1,5 +1,5 @@
 <?php
-require_once('config.php');
+require_once('op_config.php');
 $con = mysqli_connect( $host_name, $db_user, $db_password, $db_name) 
 	or die("Unable to Connect, Check the Connection Parameter. " .mysqli_error($con)) ;
 
@@ -12,7 +12,7 @@ $con = mysqli_connect( $host_name, $db_user, $db_password, $db_name)
 	// 	DELETE (delete_data, delete_multi_data)
 	//	FETCH	(get_data, get_all, get_multi_data, get_not, direct_sql)
 	//	CRYPTO (encode, decode)
-	//	STRING (rnd_str, addspace, removespace)
+	//	STRING (rnd_str, add_space, removespace)
 	//	SECURITY (xss_clean, post_clean)
 	//	ACCESS	(verify, verify_request)
 	//	EXCEL 	(csvimport, csvexport)
@@ -785,10 +785,10 @@ function upload_img ($file_name , $imgkey = 'rand', $target_dir = "upload")
             $uploadOk = 1;
         }
         // Check file size
-        if ($_FILES[$file_name]["size"] > 500000) {
-            $res['msg']= "Sorry, your file is too large.";
-            $uploadOk = 0;
-        }
+        // if ($_FILES[$file_name]["size"] > 5000000) {
+        //     $res['msg']= "Sorry, your file is too large.";
+        //     $uploadOk = 0;
+        // }
         // Allow certain file formats
         if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif" && $imageFileType != "pdf" ) {
             $res['msg']= "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
@@ -1105,7 +1105,7 @@ function date_range($gap=15 ){
 	
 function input_text($name, $value, $display =null )	
 		{
-			if($display ==null) { $display = addspace($name); }
+			if($display ==null) { $display = add_space($name); }
 			$str = "<div class='form-group'>
                             <label> $display</label>
                             <input type ='text' class='form-control' value='$value' name='$name' id ='$name'  >
@@ -1140,7 +1140,7 @@ function btn_edit($page_url, $id)
 function btn_view($table, $id ,$title ='' )
 		{
 			$view_link = 'view_data.php?link='.encode('table='.$table.'&id='.$id);
-			$str ="<a data-href='$view_link' class='view_data btn btn-success btn-xs text-light' data-title='$title'><i class='fa fa-eye'></i></a>";
+			$str ="<a data-href='$view_link' class='view_data btn btn-success btn-sm text-light' data-title='$title'><i class='fa fa-eye'></i></a> ";
 			return $str ;										
 		}
 
@@ -1306,7 +1306,7 @@ function create_list($table_name, $field,  $whereArr =null)
 		// header row
 		$html .= '<tr>';
 		foreach($array[0] as $key=>$value){
-				$html .= '<th>' . addspace(htmlspecialchars($key)) . '</th>';
+				$html .= '<th>' . add_space(htmlspecialchars($key)) . '</th>';
 			}
 			if($isedit == true)
 			{
