@@ -3,7 +3,9 @@ session_start();
 $CONFIG['token'] = session_id();
 ini_set('max_execution_time', 300);
 set_time_limit(300);
+
 date_default_timezone_set('Asia/Kolkata');
+$CONFIG['current_date_time'] = date('Y-m-d h:i:s');
 /*-------Some Basic Details (Global Variables) ---------*/
 if(isset($_SESSION['user_id']))
 {
