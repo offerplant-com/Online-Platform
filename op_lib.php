@@ -49,7 +49,7 @@ function create_table($table_name)
 	
 	$res[] = mysqli_query($con,$sql3) or die("Error In Creating Auto Increment ID  : ".mysqli_error($con));
 	
-	$sql4 ="ALTER TABLE `op_user` CHANGE `updated_at` `updated_at` TIMESTAMP on update CURRENT_TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP";
+	$sql4 ="ALTER TABLE $table_name CHANGE `updated_at` `updated_at` TIMESTAMP on update CURRENT_TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP";
 	$res[] = mysqli_query($con,$sql4) or die("Error In Assign Updated at Default Value as Current Timestamp : ".mysqli_error($con));
 	return $res;
 }
