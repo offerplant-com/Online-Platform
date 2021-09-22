@@ -2,7 +2,7 @@
 header("Access-Control-Allow-Origin: *");
 require_once('op_lib.php');
 $token =$_REQUEST['token'];
-
+/* Updated on Cpanel Also */
 if($token ==$api_key) 
 {
 	
