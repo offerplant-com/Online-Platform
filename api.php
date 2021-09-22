@@ -106,6 +106,4 @@ if($token ==$api_key)
 else{
 	die("Not Authorised");
 }
-
-
 ?>
