@@ -1515,5 +1515,15 @@ function amount_in_word(float $number)
     $paise = ($decimal > 0) ? "." . ($words[$decimal / 10] . " " . $words[$decimal % 10]) . ' Paise' : '';
     $netamt =  ($Rupees ? $Rupees . 'Rupees ' : '') . $paise;
     return ucwords($netamt);
-}		
+}	
+
+function removeFromString($str, $item) {
+    $parts = explode(',', $str);
+
+    while(($i = array_search($item, $parts)) !== false) {
+        unset($parts[$i]);
+    }
+
+    return implode(',', $parts);
+}
 ?>
