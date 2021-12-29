@@ -25,9 +25,28 @@ $con = mysqli_connect( $host_name, $db_user, $db_password, $db_name)
 	// 	CONFIG 	(set_config, update_config,delete_config, all_config, get_config)
 	//	HTML 	(input_text, input_date, btn_view, btn_edit, btn_delete) 
 	//	UI DROPDOWN (dropdown, dropdown_list, dropdown_list_multiple, dropdown_list_where,  create_list)
-	
+	//	Scrap get_whois 
 // Create Table with Basic Structure  
 
+function get_whois($domain_name)
+{
+    $html = file_get_contents("https://www.whois.com/whois/$domain_name");
+    $DOM = new DOMDocument();
+    $DOM->loadHTML($html);
+    $finder = new DomXPath($DOM);
+    $classname = 'df-row';
+    $nodes = $finder->query("//*[contains(@class, '$classname')]");
+        // foreach ($nodes as $node) {
+        //   echo "<br>".$node->nodeValue;
+        // }
+    $data['name'] = substr($nodes[0]->nodeValue,7);
+    $data['reg'] = substr($nodes[2]->nodeValue,14);
+    $data['expire'] = substr($nodes[3]->nodeValue,11);
+    $data['ns'] = substr($nodes[6]->nodeValue,13);
+    return $data;
+}
+
+print_r(get_whois('offerplant.com'));
 function create_table($table_name)
 {
 	global $con;
