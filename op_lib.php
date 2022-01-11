@@ -1075,29 +1075,29 @@ function send_msg($number,$sms)
 			return $res;
 		}	
 		
-function send_sms($number,$sms)
+function send_sms($number,$sms,$dlt_id ='10071618245450XXXXX') // for sms.morg.in 
 		{
-		    global $req_by;
-		    global $current_date_time;
+		    global $sms_auth_key;
+		    global $sender_id;
 			$res =null;
 		if(preg_match('/^[6-9]{1}[0-9]{9}+$/', $number) ==1)
 			{
 			$no =urlencode($number);
-			$msg = substr(urlencode($sms),0,340);
-			insert_data('tbl_sms',array('mobile'=>$no,'text'=>$msg,'created_by'=>$req_by,'created_at'=>$current_date_time));
-			global $sender_id;
-			global $auth_key_sms;
+			$msg = substr(urlencode($sms."\nThanks \nTEAM OFFERPLANT"),0,340);
+			// Download op_sms.sql for Data Structure 
+			$idata = insert_data('op_sms',array('mobile'=>$no,'text'=>$msg, 'sender_id'=>$sender_id));
+		
 			$ch = curl_init();
 			curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
 			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-			$url ="http://sms.morg.in/api/sendhttp.php?authkey=$auth_key_sms&mobiles=$no&message=$msg&sender=$sender_id&route=4&country=91";
+		    $url ="http://sms.morg.in/api/sendhttp.php?authkey=$sms_auth_key&mobiles=$no&message=$msg&sender=$sender_id&route=4&country=91&DLT_TE_ID=$dlt_id";
 	    	curl_setopt($ch,CURLOPT_URL, $url);
 	    	$res= curl_exec($ch);
 			curl_close($ch);
-			
+			update_data('op_sms', array('request_id'=>$res), $idata['id']);
 			}
 			return $res;
-		}		
+		}			
 
 function date_range($gap=15 ){
      
