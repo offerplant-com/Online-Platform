@@ -1545,4 +1545,23 @@ function removeFromString($str, $item) {
 
     return implode(',', $parts);
 }
+
+function expiry($date1) // service Start Date
+{
+  $date=date_create($date1);
+  date_add($date,date_interval_create_from_date_string("365 days"));
+  $date2 = date_format($date,"Y-m-d");
+  $cdate = date('Y-m-d');
+  $date1=date_create($cdate);
+  $date2=date_create($date2);
+  $diff=date_diff($date1,$date2);
+  $da = $diff->format("%a");
+  if($da <0 or $da >365)
+  {
+     die("Subscription Expired ! Please Contact to Service Provider");
+  }
+  else{
+  return $diff->format("%a days");
+  }
+}
 ?>
