@@ -159,12 +159,43 @@ function add_space($str)
 		
 // GET VIDEO ID FROM YOUTUBE LINK 
 
+
 function get_vid($url)
-		{
-			parse_str( parse_url( $url, PHP_URL_QUERY ), $my_array_of_vars );
-			return $my_array_of_vars['v'];    
-		}
-		
+	{
+	    if (stristr($url,'youtu.be/'))
+		{preg_match('/(https:|http:|)(\/\/www\.|\/\/|)(.*?)\/(.{11})/i', $url, $final_ID); return $final_ID[4]; }
+	    else 
+		{@preg_match('/(https:|http:|):(\/\/www\.|\/\/|)(.*?)\/(embed\/|watch.*?v=|)([a-z_A-Z0-9\-]{11})/i', $url, $IDD); return $IDD[5]; }
+	}
+
+function yt_info($video_url)
+    {
+    global $yt_api;
+    $yt_api = "XXXXXXAIzaSyD9ViOHePhJsjaauyrlaZbihN256Q1Osq34x6t10sXXXXXX";
+    
+	$video_id = get_vid($video_url);
+    //$video_id = "Kh8z7DCyOEE";
+    $url = "https://www.googleapis.com/youtube/v3/videos?id=" . $video_id . "&key=" . $yt_api . "&part=snippet,contentDetails,statistics,status";
+    $json = file_get_contents($url);
+    $getData = json_decode( $json , true);
+
+    foreach((array)$getData['items'] as $key => $gDat)
+        {
+            //print_r($gDat);
+            $data['video_type'] = 'VIDEO';
+            $data['video_title'] = $gDat['snippet']['title'];
+            $data['video_date'] = date('Y-m-d h:i:s',strtotime($gDat['snippet']['publishedAt']));
+            $data['video_id'] = $gDat['id'];
+            $data['video_url'] = 'https://www.youtube.com/watch?v='.$gDat['id'];
+            $data['video_image'] = $gDat['snippet']['thumbnails']['medium']['url'];
+            $data['views'] = $gDat['statistics']['viewCount'];
+            $data['like'] = $gDat['statistics']['likeCount'];
+            $data['comment'] = $gDat['statistics']['commentCount'];
+            $data['favorite'] = $gDat['statistics']['favoriteCount'];
+        }
+    return $data;
+    }
+
 // USE To CREATE A RANDOM STRING OF SPECIFIC LINK 
 function rnd_str($length_of_string) 
 { 
