@@ -12,7 +12,7 @@ $con = mysqli_connect( $host_name, $db_user, $db_password, $db_name)
 	// 	DELETE (delete_data, delete_multi_data)
 	//	FETCH	(get_data, get_all, get_multi_data, get_not, direct_sql)
 	//	CRYPTO (encode, decode)
-	//	STRING (rnd_str, add_space, remove_space)
+	//	STRING (rnd_str, add_space, remove_space, remove_from_string, add_to_string)
 	//	SECURITY (xss_clean, post_clean)
 	//	ACCESS	(verify, verify_request)
 	//	EXCEL 	(csv_import, csv_export)
@@ -1567,13 +1567,22 @@ function amount_in_word(float $number)
     return ucwords($netamt);
 }	
 
-function removeFromString($str, $item) {
+function remove_from_string($str, $item) {
     $parts = explode(',', $str);
 
     while(($i = array_search($item, $parts)) !== false) {
         unset($parts[$i]);
     }
 
+    return implode(',', $parts);
+}
+
+function add_to_string($str, $item) {
+    $parts = explode(',', $str);
+
+    while(($i = array_search($item, $parts)) == false) {
+		array_push($parts,$item);
+    }
     return implode(',', $parts);
 }
 
