@@ -1604,4 +1604,255 @@ function expiry($date1) // service Start Date
   return $diff->format("%a days");
   }
 }
+
+function del_cookie($key_id)
+    {
+        if (isset($_COOKIE[$key_id])) {
+        unset($_COOKIE[$key_id]); 
+        setcookie($key_id, null, -1, '/'); 
+        return true;
+        } else {
+            return false;
+        }
+    }
+
+
+function post_without_wait($url, $params)
+	{
+		foreach ($params as $key => &$val) {
+		  if (is_array($val)) $val = implode(',', $val);
+			$post_params[] = $key.'='.urlencode($val);
+		}
+		$post_string = implode('&', $post_params);
+		$parts=parse_url($url);
+		$fp = fsockopen($parts['host'],
+			isset($parts['port'])?$parts['port']:80,
+			$errno, $errstr, 30);
+		
+		
+		$out = "POST ".$parts['path']." HTTP/1.1\r\n";
+		$out.= "Host: ".$parts['host']."\r\n";
+		$out.= "Content-Type: application/x-www-form-urlencoded\r\n";
+		$out.= "Content-Length: ".strlen($post_string)."\r\n";
+		$out.= "Connection: Close\r\n\r\n";
+		if (isset($post_string)) $out.= $post_string;
+
+		fwrite($fp, $out);
+		//fclose($fp);
+	}
+function backup_sql($con, $tables = '*')
+{
+	//global $con;
+	$return = '';
+	//get all of the tables
+	if($tables == '*')
+	{
+		$tables = array();
+		$result = mysqli_query($con, 'SHOW TABLES');
+		while($row = mysqli_fetch_array($result))
+		{
+			$tables[] = $row[0];
+		}
+	}
+	else
+	{
+		$tables = is_array($tables) ? $tables : explode(',',$tables);
+	}
+
+	//cycle through
+	foreach($tables as $table)
+	{
+		$result = mysqli_query($con, 'SELECT * FROM '.$table);
+		$num_fields = mysqli_num_fields($result);
+
+		$return.= 'DROP TABLE IF EXISTS '.$table.';';
+		
+		$row2 = mysqli_fetch_array(mysqli_query($con, 'SHOW CREATE TABLE '.$table));
+		$return.= "\n\n".$row2[1].";\n\n";
+
+		for ($i = 0; $i < $num_fields; $i++)
+		{
+			while($row = mysqli_fetch_array($result))
+			{
+				$return.= 'INSERT INTO '.$table.' VALUES(';
+				for($j=0; $j<$num_fields; $j++)
+				{
+					$row[$j] = addslashes($row[$j]);
+					$row[$j] = preg_replace("/\\n/","\\n",$row[$j]);
+					if (isset($row[$j]) and $row[$j] !="") { $return.= '"'.$row[$j].'"' ; } else { $return.= "NULL"; }
+					if ($j<($num_fields-1)) { $return.= ','; }
+				}
+				$return.= ");\n";
+			}
+		}
+		$return.="\n\n\n";
+	}
+
+	$myfile = fopen("backup.sql", "w") or die("Unable to open file!");
+	fwrite($myfile, $return);
+	fclose($myfile);
+	return $myfile;
+}	
+
+
+function backup_zip($host='localhost',$user='root',$pass='',$name='test' ,$tables = '*')
+{
+
+  $connection = mysqli_connect($host, $user, $pass, $name);
+    if (mysqli_connect_error()){
+        trigger_error("Connection Error: " . mysqli_connect_error());
+    }
+	$return = '';
+
+	//get all of the tables
+	if($tables == '*')
+	{
+		$tables = array();
+		$result = mysqli_query($connection, 'SHOW TABLES');
+		while($row = mysqli_fetch_array($result))
+		{
+			$tables[] = $row[0];
+		}
+	}
+	else
+	{
+		$tables = is_array($tables) ? $tables : explode(',',$tables);
+	}
+
+	//cycle through
+	foreach($tables as $table)
+	{
+	    global $inst_name;
+	    $site_name= strtolower(preg_replace('/[^A-Za-z0-9\-]/', '', $inst_name));
+		$result = mysqli_query($connection, 'SELECT * FROM '.$table);
+		$num_fields = mysqli_num_fields($result);
+
+		$return.= 'DROP TABLE '.$table.';';
+		$row2 = mysqli_fetch_array(mysqli_query($connection, 'SHOW CREATE TABLE '.$table));
+		$return.= "\n\n".$row2[1].";\n\n";
+
+		for ($i = 0; $i < $num_fields; $i++)
+		{
+			while($row = mysqli_fetch_array($result))
+			{
+				$return.= 'INSERT INTO '.$table.' VALUES(';
+				for($j=0; $j<$num_fields; $j++)
+				{
+					$row[$j] = addslashes($row[$j]);
+					$row[$j] = preg_replace("/\\n/","\\n",$row[$j]);
+					if (isset($row[$j])) { $return.= '"'.$row[$j].'"' ; } else { $return.= '""'; }
+					if ($j<($num_fields-1)) { $return.= ','; }
+				}
+				$return.= ");\n";
+			}
+		}
+		$return.="\n\n\n";
+	}
+
+	//save file
+	
+	if (!file_exists('database_backups')) {
+ 	   mkdir('database_backups', 0777, true);
+ 	}
+	$filename = 'database_backups/db-'.time().'-'.(md5(implode(',',$tables))).'.sql.gz';
+	$handle = fopen($filename,'w+');
+	$gzdata = gzencode($return, 9);
+	fwrite($handle,$gzdata);
+	fclose($handle);
+	return $filename;
+}
+
+
+function email_file($filename, $to =MAIL_TO){
+	# Put your own email code in here.
+	    global $inst_name;
+	    global $dev_email;
+	    global $inst_url;
+	    global $noreply_email;
+         
+        // Sender 
+        $from = $noreply_email; 
+        $fromName = $inst_name;; 
+         
+        // Email subject 
+        $subject = $inst_name .' :All DB Backup as on ' .date('Y-m-d h:i A');  
+         
+        // Attachment file 
+        //$file = "database_backups/".$filename; 
+        $file = $filename; 
+         
+        // Email body content 
+        $htmlContent = " 
+            <h3>PHP Email with Attachment with SQL File of $inst_name </h3> 
+            <p>This email Contains SQL Backup till ". date("Y-m-d H:i A")." </p>"; 
+         
+        // Header for sender info 
+        $headers = "From: $fromName"." <".$from.">"; 
+         
+        // Boundary  
+        $semi_rand = md5(time());  
+        $mime_boundary = "==Multipart_Boundary_x{$semi_rand}x";  
+         
+        // Headers for attachment  
+        $headers .= "\nMIME-Version: 1.0\n" . "Content-Type: multipart/mixed;\n" . " boundary=\"{$mime_boundary}\""; 
+         
+        // Multipart boundary  
+        $message = "--{$mime_boundary}\n" . "Content-Type: text/html; charset=\"UTF-8\"\n" . 
+        "Content-Transfer-Encoding: 7bit\n\n" . $htmlContent . "\n\n";  
+         
+        // Preparing attachment 
+        if(!empty($file) > 0){ 
+            if(is_file($file)){ 
+                $message .= "--{$mime_boundary}\n"; 
+                $fp =    @fopen($file,"rb"); 
+                $data =  @fread($fp,filesize($file)); 
+         
+                @fclose($fp); 
+                $data = chunk_split(base64_encode($data)); 
+                $message .= "Content-Type: application/octet-stream; name=\"".basename($file)."\"\n" .  
+                "Content-Description: ".basename($file)."\n" . 
+                "Content-Disposition: attachment;\n" . " filename=\"".basename($file)."\"; size=".filesize($file).";\n" .  
+                "Content-Transfer-Encoding: base64\n\n" . $data . "\n\n"; 
+            } 
+        } 
+        $message .= "--{$mime_boundary}--"; 
+        $returnpath = "-f" . $from; 
+         
+        // Send email 
+        $mail = @mail($to, $subject, $message, $headers, $returnpath);  
+         
+        // Email sending status 
+        echo $mail?"<p>Email Sent Successfully $to !</p><br>":"<p>Email sending failed.</p><br>";
+}
+
+function get_file_size($filename) {
+
+    $bytes = filesize($filename);
+        if ($bytes >= 1073741824)
+        {
+            $bytes = number_format($bytes / 1073741824, 2) . ' GB';
+        }
+        elseif ($bytes >= 1048576)
+        {
+            $bytes = number_format($bytes / 1048576, 2) . ' MB';
+        }
+        elseif ($bytes >= 1024)
+        {
+            $bytes = number_format($bytes / 1024, 2) . ' KB';
+        }
+        elseif ($bytes > 1)
+        {
+            $bytes = $bytes . ' bytes';
+        }
+        elseif ($bytes == 1)
+        {
+            $bytes = $bytes . ' byte';
+        }
+        else
+        {
+            $bytes = '0 bytes';
+        }
+
+        return $bytes;
+}
 ?>
