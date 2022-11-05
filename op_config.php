@@ -11,44 +11,44 @@ if(isset($_SESSION['user_id']))
 {
 	$CONFIG['user_id'] = $_SESSION['user_id'];
 }
-$CONFIG['full_name'] ="ERPC SERVICES";
-$CONFIG['inst_name'] ="Shrishti Enterprises";
-$CONFIG['inst_info'] ="By Shrishti Enterprises";
-$CONFIG['inst_address1'] ="Rambhrrda Hajipur ";
-$CONFIG['inst_address2'] ="Vaishali Bihar - 841401";
-$CONFIG['inst_contact'] ="9334315554";
+$CONFIG['full_name'] ="API SERVICES";
+$CONFIG['inst_name'] ="OFFERPLANT TECHNOLOGIES";
+$CONFIG['inst_info'] ="By OFFERPLANT TECHNOLOGIES";
+$CONFIG['inst_address1'] ="Chapra Saran";
+$CONFIG['inst_address2'] ="Bihar - 841301";
+$CONFIG['inst_contact'] ="9431426600";
 $CONFIG['inst_contact2'] ="";
-$CONFIG['inst_email'] ="info@shrishtienterprises.org";
+$CONFIG['inst_email'] ="ask@offerplant.com";
 $CONFIG['inst_logo'] ="assets/img/logo.png";
 $CONFIG['white_logo'] ="img/white_logo.png";
 $CONFIG['banner'] ="assets/img/banner.jpg";
-$CONFIG['inst_url'] ="https://shrishtienterprises.org";
+$CONFIG['inst_url'] ="https://offerplant.com";
 $CONFIG['inst_type'] ="SERVICE PROVIDER";
-$CONFIG['sender_id'] ="SHRSTI";
-$CONFIG['noreply_email'] ="noreply@shrishtienterprises.org";
+$CONFIG['sender_id'] ="OFFSMS";
+$CONFIG['noreply_email'] ="noreply@offerplant.com";
 $CONFIG['auth_key'] ="188195A981rNIY8n1Y5a338b1c";
-$CONFIG['base_url'] ='https://shrishtienterprises.org/app/';
-$CONFIG['api_key'] ='5546a8eee36769fb0a082bcbca5a66ed'; //APP API ShrishtiEnterPrises
+$CONFIG['base_url'] ='https://offerplant.com/app/';
+$CONFIG['api_key'] =''; // SMS API KEY 
 $CONFIG['app_start_date'] ='2021-04-01';
-$CONFIG['app_link'] ='https://bit.ly/shrishtienterprises';
+$CONFIG['app_link'] =''; // Play Store or Bit.ly link
 
 
-$CONFIG['YTAPI_key'] = 'AIzaSyCJoEDAARmX8QHNyc651PdSnvRr66rpJNY'; // YOUTUBE API 
+$CONFIG['YTAPI_key'] = ''; // YOUTUBE API 
 /*---------Social Link ----------*/
 
-$CONFIG['facebook'] ='http://facebook.com/shrishtienterprises.orgin';
-$CONFIG['twitter'] ='http://twitter.com/shrishtienterprises.orgin';
+$CONFIG['facebook'] ='http://facebook.com/offerplant.comin';
+$CONFIG['twitter'] ='http://twitter.com/offerplant.comin';
 $CONFIG['linkedin'] ='';
 $CONFIG['youtube'] ='http://youtube.com';
 $CONFIG['pinterest'] ='';
-$CONFIG['instagram'] ='http://instagram.com/shrishtienterprises.orgin';
-$CONFIG['telegram'] ='http://t.me/shrishtienterprises.orgin';
+$CONFIG['instagram'] ='http://instagram.com/offerplant.comin';
+$CONFIG['telegram'] ='http://t.me/offerplant.comin';
 
 
 $CONFIG['yt_live'] = 'https://www.youtube.com/embed/live_stream?channel=UCZMZpy3Ak_Y9ckeltZqVx7Q';
 $CONFIG['channelId'] = 'UC500odmthCIKPu6R8kmZV2Q'; // Youtube Channel id
 
-$CONFIG['app_name'] ='shrishtienterprises.org 1.0';
+$CONFIG['app_name'] ='offerplant.com 1.0';
 $CONFIG['dev_company'] ="OfferPlant Technologies Private Limited";
 $CONFIG['dev_by'] ="OfferPlant";
 $CONFIG['dev_url'] ="http://offerplant.com";
@@ -58,10 +58,10 @@ $CONFIG['dev_contact'] ="9431426600";
 
 /* Live Configuration */
 $CONFIG['host_name'] ='localhost';
-$CONFIG['db_user'] ='shrishti_user';
-$CONFIG['db_password'] ='Pass@@2021';
-$CONFIG['db_name'] ='shrishti_db';
-$CONFIG['base_url'] ='https://shrishtienterprises.org/app/';
+$CONFIG['db_user'] ='morg_all';
+$CONFIG['db_password'] ='@All_2001';
+$CONFIG['db_name'] ='morg_all';
+$CONFIG['base_url'] ='https://morg.in/api/';
 
 $CONFIG['gender_list'] =array('','MALE','FEMALE','OTHER');
 $CONFIG['qualification_list'] =array('','Non Matric','Matric','Intermediate','Graduation','Post Graduation' );
@@ -77,14 +77,13 @@ $CONFIG['unit_list'] =array('Days','Months','Hours','Years');
 $CONFIG['month'] = array('April','May','June','July','August','September','October','November','December','January','February','March');
 
 
-$CONFIG['course_list'] = $student_class_list =array('','I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII');
+$student_class_list =array('','I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII');
 
 $CONFIG['section_list'] =array('','A','B','C');
 $CONFIG['day_list'] =array('','SUN','MON','TUE','WED','THU','FRI','SAT');
 
 $CONFIG['meeting_list'] =array(''=>'Select','gm_code'=>'GOOGLE MEET','zoom_code'=>'ZOOM MEETING','jitsi_code'=>'JITSI MEET',); 
 
-$CONFIG['req_type_list'] = array('Electric','Plumber','CCTV','Solar','Inverter','RO','Other');
 
 /*-------End of Basic Details ---------*/
 
