@@ -307,22 +307,29 @@ function verify($user_type)
 	}			
 }
 
-// TO ADD COLUMN IN TABLE 
-
+// To check and Add Column in Table
 function add_column($table_name, $col_name, $data_type ='varchar(255)', $default =null )
 	{
 		global $con;
+		$exist = direct_sql("SHOW COLUMNS FROM $table_name LIKE '$col_name'");
+		if($exist['count']==0)
+		{ 
 		$sql ="alter table $table_name add column $col_name $data_type $default"; 
-		$res =mysqli_query($con,$sql) or die("Error in Adding Column". mysqli_error($con));
+		$res =mysqli_query($con,$sql) or die("Error in Adding Coumn". mysqli_error($con));
+		}
+		
 	}
-
-// TO REMOVE COLUMN IN TABLE 
-
+	
+// To Remove a Column from Table
 function remove_column($table_name, $col_name )
 	{
 		global $con;
+		$exist = direct_sql("SHOW COLUMNS FROM $table_name LIKE '$col_name'");
+		if($exist['count']==1)
+		{
 		$sql ="alter table $table_name drop column $col_name "; 
 		$res =mysqli_query($con,$sql) or die("Error in Removing Column". mysqli_error($con));
+		}
 	}
 	
 // TO INSERT BLANK ROW IN A TABLE  	
@@ -578,7 +585,7 @@ function delete_multi_data( $table_name, $whereArr)
 				$newvalue = preg_replace('/[^A-Za-z.@,:+0-9\-]/', ' ', $value);
 				$where[] = "$key = '$newvalue'";
 			}
-		$sql = "delete from". $table_name ." WHERE " .implode('and ', $where);
+		$sql = "delete from ". $table_name ." WHERE " .implode('and ', $where);
 		$res =mysqli_query($con,$sql) or die("Error in Deleting Data". mysqli_error($con));
 		$num = mysqli_affected_rows($con);
 		if($num >=1)
